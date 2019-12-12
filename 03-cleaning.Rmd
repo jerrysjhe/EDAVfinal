@@ -1,1 +1,176 @@
 # Data transformation
+
+## Description
+
+Since the data has been pre-cleaned by the source, our transformation is: 
+
+1. To deal with the sales variable, we convert the ranges (categories) into quantity by generating random numbers from the normal distribution in range. For each range, we set the medium number as the mean, standard deviation as the range/6. The main purpose of generating random number is to produce continuous data instead of categories data. For example, in range "0-20000", we will replace value by  generating number within mean = 10000, and standard deviation = 20000/6 (Since by the definition of area in normal distribution, 20000/6 will cover 99.7% of the total area in normal distribution) if the generated data is outside of 99.7% area in normal distribution, we will round them inside.
+
+2. Combine developers with their branch (For instance, "Ubisoft Montreal" is the Canandian branch of "Ubisoft") and integrate the format of the same developer in different expressions. (For instance, “Astrofish Games” and “Astrofish Games Ltd” or “Astrofish Games Co, Ltd”)
+
+3. Group the data by platform, developer, etc. Filter the developers with the number of games they publish.
+
+## Before transformation
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, results=FALSE}
+library(readr)
+library(plyr)
+library(ggplot2)
+library(tidyverse)
+library(dplyr)
+library(grid)
+library(gridExtra)
+library(wordcloud2)
+library(ggthemes)
+library(scales)
+data <- read_csv("steam.csv")
+n <- dim(data)[1]
+
+blue_theme <- function() {
+  theme(
+    # add border 1)
+    panel.border = element_rect(colour = "blue", fill = NA, linetype = 2),
+    # color background 2)
+    panel.background = element_rect(fill = "aliceblue"),
+    # modify grid 3)
+    panel.grid.major.x = element_line(colour = "steelblue", linetype = 3, size = 0.5),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.major.y =  element_line(colour = "steelblue", linetype = 3, size = 0.5),
+    panel.grid.minor.y = element_blank(),
+    # modify text, axis and colour 4) and 5)
+    axis.text = element_text(colour = "steelblue", face = "italic", family = "Times New Roman", size = 10),
+    axis.title = element_text(colour = "darkblue", family = "Times New Roman", size = 13),
+    axis.ticks = element_line(colour = "steelblue"),
+    # legend at the bottom 6)
+    legend.position = "bottom",
+    # title
+    plot.title = element_text(family = "Times New Roman",face = "bold",size = 15),
+    plot.subtitle = element_text(size = 10),
+    plot.caption = element_text(size = 8)
+  )
+}
+update_geom_defaults("bar", list(fill = "steelblue", alpha = 0.6, colour = "blue"))
+update_geom_defaults("point", list(fill = "steelblue", alpha = 0.6, colour = "blue"))
+title_theme <- function() {
+  theme(
+    axis.text = element_text(face = "italic", family = "Times New Roman", size = 10),
+    axis.title = element_text(family = "Times New Roman", size = 13),
+    plot.title = element_text(family = "Times New Roman",face = "bold",size = 15),
+    plot.subtitle = element_text(size = 10),
+    plot.caption = element_text(size = 8)
+  )
+}
+
+Win_Str <- function(x) {
+  if (grepl("windows",x)) {
+    return(1)
+  } else {return(0)}
+}
+Mac_Str <- function(x) {
+  if (grepl("mac",x)) {
+    return(1)
+  } else {return(0)}
+}
+Lin_Str <- function(x) {
+  if (grepl("linux",x)) {
+    return(1)
+  } else {return(0)}
+}
+data$windows = sapply(data$platforms,Win_Str)
+data$mac = sapply(data$platforms,Mac_Str)
+data$linux = sapply(data$platforms,Lin_Str)
+
+data <- data[,-7]
+
+CapStr <- function(y) {
+  c <- strsplit(y, " ")[[1]]
+  paste(toupper(substring(c, 1,1)), substring(c, 2),
+      sep="", collapse=" ")
+}
+data$developer <- sapply(data$developer,tolower)
+data$developer <- sapply(data$developer,CapStr)
+
+data$developer <- replace(data$developer, data$developer == "Ubisoft Montreal", "Ubisoft")
+data$developer <- sapply(data$developer,function (x) gsub(", Inc.","",x))
+data$developer <- sapply(data$developer,function (x) gsub(", Inc","",x))
+data$developer <- sapply(data$developer,function (x) gsub(",Inc.","",x))
+data$developer <- sapply(data$developer,function (x) gsub(",Inc","",x))
+data$developer <- sapply(data$developer,function (x) gsub(" Inc.","",x))
+data$developer <- sapply(data$developer,function (x) gsub("Inc.","",x))
+data$developer <- sapply(data$developer,function (x) gsub(" Inc","",x))
+data$developer <- sapply(data$developer,function (x) gsub(" Co., Ltd.","",x)) 
+data$developer <- sapply(data$developer,function (x) gsub(" Co., ltd.","",x))
+data$developer <- sapply(data$developer,function (x) gsub(" Co., Ltd","",x)) 
+data$developer <- sapply(data$developer,function (x) gsub(" Co., ltd","",x))
+data$developer <- sapply(data$developer,function (x) gsub(" Co.,ltd","",x))
+data$developer <- sapply(data$developer,function (x) gsub(" Co.,Ltd","",x))
+data$developer <- sapply(data$developer,function (x) gsub(" Co.ltd","",x))
+data$developer <- sapply(data$developer,function (x) gsub(" Co.Ltd","",x))
+data$developer <- sapply(data$developer,function (x) gsub(" CO., LTD","",x))
+data$developer <- sapply(data$developer,function (x) gsub(" Ltd.","",x))
+data$developer <- sapply(data$developer,function (x) gsub(" ltd.","",x))
+data$developer <- sapply(data$developer,function (x) gsub(" Ltd","",x))
+data$developer <- sapply(data$developer,function (x) gsub(" ltd","",x))
+data$developer <- sapply(data$developer,function (x) strsplit(x,";")[[1]][1])
+
+#generate random sales data
+Random_sales <- function(l) {
+  r = rnorm(1,mean = mean(l), sd = (l[2]-l[1])/6)
+  return(ifelse(r>0,r,1))
+}
+data <- data %>% mutate(sales = strsplit(as.character(owners),"-"))
+data$sales <- sapply(lapply(data$sales,as.numeric), Random_sales)
+data$developer <- as.factor(data$developer)
+#for log scale
+data$average_playtime = data$average_playtime + 1
+```
+
+```{r, echo=FALSE, warning = FALSE}
+data %>% ggplot(aes(x = sales)) + geom_histogram(bins = 40) + geom_density() +
+  geom_vline(xintercept = 100000, color = "Pink") + 
+  annotate("text", x = 120000, y = 5500, label = "100,000 Sales", color = "darkred", hjust = 0) +
+  geom_vline(xintercept = 10000, color = "Pink") +
+  annotate("text", x = 1000, y = 5500, label = "10,000 Sales", color = "darkred", hjust = 0) +
+  scale_x_continuous(limits = c(100,100000000), trans = log10_trans(),
+    breaks = trans_breaks("log10", function(x) 10^x),
+    labels = trans_format("log10", math_format(10^.x))) + 
+  xlab("Sales Volume") + ylab("Counts of Games") + 
+  labs(title = "Distribution of Sales Volume", subtitle = "Based on all steam games") + 
+  blue_theme()
+```
+
+First, we look at the graph as dimension of sales number and number of companies, from the graph above to find the pattern for games’ sales volume. We draw two vertical lines, sales volume of 10000 and 100000, as shrehold to identify the game. 
+
+We can see that it’s approximately a right-skewed normal distribution. The largest bar is around 10000, which means many games have 10000 sales volume or below. Since our focus is primarily on games who are defined as ‘good’, which would be ‘AAA games’, therefore, we add a threshold at 10000(red line), and drop the game that sales volume is about 10000 and below, which means ’the games whose sales volume below 10000 have few quantities and hence is trivial for us to make further analysis. For our next step, we add another threshold line at 100000(blue line). Since there are too many games below 100000 and it is not in our consideration for AAA games. Therefore, we further narrow down our scope for analyzing top games.
+
+Concerning that sales of games would vary dramatically from the time they just have been released and become steady after a period of time, we drop the games released after 2019 since the result would be unstable. In another perspective of filtering, we mark the companies whose sales volume over 100000 as “large companies”. We define “ratio” as positive ratings over all ratings and “money” as sales volume multiplied by price.
+
+## After transformation
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+# remove new game
+company_data <- data %>% filter(data$release_date < as.Date("2019-01-01")) 
+# remove trash
+company_large <- company_data %>% group_by(developer) %>% 
+  dplyr::summarise(sales = sum(sales)) %>% filter(sales > 100000) 
+company_data <- company_data %>% filter(company_data$developer %in% company_large$developer)
+
+company_data <- company_data %>% mutate(ratio = positive_ratings/(positive_ratings + negative_ratings), money = sales*price+1)
+```
+
+```{r, echo = FALSE, warning=FALSE}
+company_data %>% ggplot() + geom_histogram(aes(x = sales), bins = 30) +
+  geom_vline(xintercept = 100000, color = "Pink") +
+  annotate("text", x = 200000, y = 1250, label = "100,000 Sales", color = "darkred", hjust = 0) +
+  geom_vline(xintercept = 10000, color = "Pink") +
+  annotate("text", x = 700, y = 1250, label = "10,000 Sales", color = "darkred", hjust = 0) +
+  scale_x_continuous(limits = c(100,100000000), trans = log10_trans(),
+    breaks = trans_breaks("log10", function(x) 10^x),
+    labels = trans_format("log10", math_format(10^.x))) + 
+  xlab("Sales Volume") + ylab("Counts of Games") + 
+  labs(title = "Distribution of Sales Volume", subtitle = "Based on games of  \"large\" developers on steam") + 
+  blue_theme()
+```
+
+Similar to the game volume plot, we filtered first that for the total game sales of companies that larger than 100000, narrowing down our analyze range. After we draw sales plot grouping by developers, it shows almost the same distribution: a right-skewed normal distribution. So, we add red shrehold line at 10000 and drop the developers whose sales below it for the same reason.
+

@@ -1,3 +1,153 @@
-# Interactive component
+# Evaluation Factors
 
+## Parallel Coordinates
+
+```{r fig.height=5, fig.width=8, echo=FALSE}
+library(parcoords)
+aaa %>% mutate(Average_playtime = log(average_playtime), Sales_Volume = log(sales),
+               Price = price, Developer = developer, Ratio = ratio) %>%
+  select(c('Developer','Price','Ratio','Average_playtime','Sales_Volume')) %>% 
+  parcoords(rownames = FALSE, brushMode = "2D-strums", reorderable = TRUE,
+            color = RColorBrewer::brewer.pal(4,"BuPu")[3])
+```
+
+After the brief look and filtering, we draw the parallel coordinates to see the relationship between different game factors. With the interactivity, we can find some intuitive trends:
+
+- Valve and Ubisoft have many free games, which corresponds to our claim above.
+
+- Majority of game with low price have a large ratio of good ratings
+
+- Almost all the games have large ratio, which accord with the claim that AAA games have large ratings
+
+- High ratios will also have relatively high average playtime
+
+
+## Correlation of Different Variable
+
+```{r fig.height=7, fig.width=7, echo=FALSE}
+library(shiny)
+
+ui <- fluidPage(
+  titlePanel("AAA Games"),
+  sidebarLayout(
+    sidebarPanel(
+      selectInput(inputId = "xaxis",
+                  label = "X-axis:",
+                  choices = c("Average playtime", "Ratio", 
+                              "Sales Volume", "Price", "Sales")),
+      selectInput(inputId = "yaxis",
+                  label = "Y-axis:",
+                  choices = c("Ratio", "Average playtime", 
+                              "Sales Volume", "Price", "Sales"))
+
+    ),
+    mainPanel(
+      plotOutput(outputId = "Plot1")
+
+    )
+  )
+)
+
+server <- function(input, output) {
+  output$Plot1 <- renderPlot({
+    xcha <- input$xaxis
+    ycha <- input$yaxis
+    xaxis <-switch(input$xaxis,
+             "Average playtime" = "log_avg",
+             "Ratio" = "ratio",
+             "Sales Volume" = "log_sale",
+             "Price" = "price",
+             "Sales" = "full_sales")
+    
+    yaxis <- switch(input$yaxis,
+             "Average playtime" = "log_avg",
+             "Ratio" = "ratio",
+             "Sales Volume" = "log_sale",
+             "Price" = "price",
+             "Sales" = "full_sales")
+  
+    data_shiny <- aaa
+    free_game <- data_shiny %>% filter(price == 0)
+    notfree_game <- data_shiny %>% filter(price != 0)
+    
+    data_shiny <- data_shiny %>% mutate(
+                    log_avg = log(average_playtime), 
+                    log_sale = log(sales), full_sales = log(money))
+      ggplot() + 
+        geom_point(aes(x = data_shiny[[xaxis]], 
+                       y = data_shiny[[yaxis]]), alpha = 1) +
+        xlab(xcha) + ylab(ycha) +
+        theme(axis.title.x = element_text(size = 15),
+              axis.title.y = element_text(size = 15),
+              axis.text.x = element_text(size = 10),
+              axis.text.y = element_text(size = 10),
+              plot.title = element_text(size = 20))
+    })
+
+}
+
+shinyApp(ui = ui, server = server, options = list(height=530))
+```
+
+## Relation of AAA and non-AAA
+
+### Ratio and Price
+
+```{r, echo=FALSE}
+company_data %>% mutate(ifaaa = ifelse(name %in% aaa$name,"AAA","Not AAA"), 
+                        weight =  ifelse(name %in% aaa$name,
+                                         nrow(company_data)-nrow(aaa),nrow(aaa))) %>% 
+  sample_frac(0.2, weight = weight) %>%
+  filter(price > quantile(price, 0.01, na.rm = TRUE)) %>%
+  filter(price < quantile(price, 0.99, na.rm = TRUE)) %>%
+  ggplot() + geom_point(aes(x = price, y = ratio, color = ifaaa), alpha = 0.5) + coord_flip() +
+  ylab("Ratio") + xlab("Price(dollar)") + 
+  labs(title = "Ratio VS Price", color = "Type of Companies") + 
+  theme_calc() + scale_colour_calc() +title_theme() +
+  theme(panel.background = element_rect(fill = "aliceblue"))
+```
+
+We draw a dot plot to see the difference between AAA companies and others. AAA companies have even price distribution in the whole range, while the others tend to have lower price. Moreover, almost all the games of AAA companies have ratio over 0.5, while others distribute evenly in the whole range.
+
+### Ratio and Sales
+
+```{r echo=FALSE}
+company_data %>% mutate(ifaaa = ifelse(name %in% aaa$name,"AAA","Not AAA"), 
+                        weight =  ifelse(name %in% aaa$name,
+                                         nrow(company_data)-nrow(aaa),nrow(aaa))) %>% 
+  sample_frac(0.2, weight = weight) %>%
+  filter(sales > quantile(sales, 0.01, na.rm = TRUE)) %>%
+  filter(sales < quantile(sales, 0.99, na.rm = TRUE)) %>%
+  ggplot() + geom_point(aes(x = sales, y = ratio, color = ifaaa), alpha = 0.5) + 
+  scale_x_continuous(trans = log10_trans(),
+    breaks = trans_breaks("log10", function(x) 10^x),
+    labels = trans_format("log10", math_format(10^.x))) +
+  ylab("Ratio") + xlab("Sales Volume") + 
+  labs(title = "Ratio VS Sales Volume", color = "Type of Companies") + coord_flip() +
+  theme_calc() + scale_colour_calc() + title_theme() +
+  theme(panel.background = element_rect(fill = "aliceblue"))
+```
+
+We do more analysis with the sales with the good rating ratio, we can see the data points are stratified. The reason is that we generate random points using normal distribution from each range. What’s more, for the general trend, the game quantity is decreasing as the sales increase. If the game is ‘AAA’, they are clustered at greater sale than the game that is not ‘AAA’.
+
+### Ratio and Average time
+
+```{r echo=FALSE, warning = FALSE}
+company_data %>% mutate(ifaaa = ifelse(name %in% aaa$name,"AAA","Not AAA"), 
+                        weight =  ifelse(name %in% aaa$name,
+                                         nrow(company_data)-nrow(aaa),nrow(aaa))) %>% 
+  sample_frac(0.2, weight = weight) %>%
+  filter(average_playtime > quantile(average_playtime, 0.01, na.rm = TRUE)) %>%
+  filter(average_playtime < quantile(average_playtime, 0.99, na.rm = TRUE)) %>%
+  ggplot() + geom_point(aes(x = average_playtime, y = ratio, color = ifaaa), alpha = 0.5) + coord_flip() +
+  scale_x_continuous(trans = log10_trans(),
+    breaks = trans_breaks("log10", function(x) 10^x),
+    labels = trans_format("log10", math_format(10^.x))) +
+  ylab("Ratio") + xlab("Average Playtime(h)") + 
+  labs(title = "Ratio VS Average Playtime", color = "Type of Companies") + coord_flip() +
+  theme_calc() + scale_colour_calc() + title_theme() +
+  theme(panel.background = element_rect(fill = "aliceblue"))
+```
+
+In this plot of ratio and average playtime between AAA companies and other companies. We find out that the log data have an approximate normal distribution. There is no big difference between AAA companies and others. 
 

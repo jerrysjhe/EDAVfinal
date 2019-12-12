@@ -1,0 +1,46 @@
+# Tags
+
+## Type of AAA Games
+
+```{r, echo=FALSE}
+tag <- data.frame(unlist(strsplit(aaa$steamspy_tags,";")))
+colnames(tag) <- c("tag")
+
+tag %>% group_by(tag) %>% summarise(n = n()) %>%
+  mutate(frac = n/645) %>%
+  filter(frac>=0.01) %>%
+  ggplot() + geom_bar(aes(x = reorder(tag,-frac), y = frac), stat = "identity") + coord_flip() +
+  xlab("Tags") + ylab("Percetage") + 
+  labs(title = "What Kind of Games AAA Companies Love to Produce", subtitle = "Most common tags in AAA games") + 
+  blue_theme()
+```
+
+## Type of All Games
+
+```{r, echo=FALSE}
+tag_all <- data.frame(unlist(strsplit(company_data$steamspy_tags,";")))
+colnames(tag_all) <- c("tag")
+tag_all %>% group_by(tag) %>% summarise(n = n()) %>%
+  mutate(frac = n/8838) %>%
+  filter(frac>=0.0005) %>%
+  filter(n > quantile(n, 0.9, na.rm = TRUE)) %>%
+  ggplot() + geom_bar(aes(x = reorder(tag,-frac), y = frac), stat = "identity") + coord_flip() +
+  xlab("Tags") + ylab("Percetage") + 
+  labs(title = "What Kind of Games Developers Love to Produce", subtitle = "Most common tags in steam games") + 
+  blue_theme()
+```
+
+In ‘AAA’ games, the top 3 popular tags are Action, Strategy, FPS, which corresponds to the current market trend. For example, action game GTA5, developed  has the top 1 total sales Company will be devoted to develop such games as they are profitable and attractive to players.
+In non ‘AAA’ games.
+
+## Worldcloud
+
+```{r, echo=FALSE}
+wordcloud2(data = tag %>% group_by(tag) %>% summarise(n = n()), size = 1)
+```
+
+```{r, echo=FALSE}
+wordcloud2(data = tag_all %>% group_by(tag) %>% summarise(n = n()), size = 0.8)
+```
+
+

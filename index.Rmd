@@ -7,3 +7,28 @@ site: bookdown::bookdown_site
 
 # Introduction
 
+As the digital technology increasing rapidly, video games is part of our life. Many students have played games on a PC platform Steam, including us. There are so many games and we may find it difficult to decide which game to play. Also, we have conflicts on defining which games are “good” and which are not. Maybe we cannot come to an agreement, but we are all interested in finding trends and patterns behind the popular games. Moreover, we would gain insights into what makes a game more successful in terms of sales, play-time and ratings, etc. We want to take a closer look at the data behind the games. But first, let us introduce some backgrounds for our data visualization.
+
+## Brief introduction
+
+**Steam** is the major gaming platform developed by Valve in PC which almost include all possible games on the PC. It was first launched as gaming improvement software in 2003 as a way for Valve to provide automatic updates for their games, and expanded to include games from third-party publishers. Steam has also expanded into an online web-based and mobile digital storefront. Steam offers digital rights management for protecting game copyrights, matchmaking servers for online multiplayer gaming, video streaming for recording and publishing game videos, and social networking services for connecting and exploring game social. It also provides the user with installation and automatic updating of games, and community features such as friends lists and groups, cloud saving, and in-game voice and chat functionality.
+
+For more detail information, please visit wikipedia: https://en.wikipedia.org/wiki/Steam_(service)
+
+## Criteria for judging a game
+
+We will use the definition of AAA games: It is a classification used for video games produced and distributed by major famous publisher(companies that having top 0.5% sales), typically having higher development and marketing budgets. We also call these types of companies as AAA company. AAA is analogous to the film industry term "blockbuster". 
+
+For more detail information, please visit wikipedia:
+https://en.wikipedia.org/wiki/AAA_(video_game_industry)
+ 
+## Question
+1. What is the difference in sales between free games and charged games?
+2. Perform ranking of total sales for all companies, then take a closer look to companies at top rankings. What are the factors for influencing companies to produce good game? 
+3. Does the multiplayer games or single-player games have an effect on game sale, or ‘AAA’ games
+4. What will the player‘s phenomenon and reaction for good game(avg play time, ratings, etc)?
+5. Does game price have an effect on game sales, ratings?
+6. What will be the difference between normal games and ‘AAA’ games
+
+Finally, we have our overall objective: what will be the key elements that effect on ‘AAA’ games?
+

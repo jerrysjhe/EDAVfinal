@@ -1,1 +1,152 @@
-# Results
+# AAA Games
+
+## Find AAA Games
+
+First, we try to find AAA developers. We draw the Cleveland dot plots of their sales volume and sales. We draw vertical lines of 15,000,000 and 30,000,000 for sales volume, 150,000,000 and 300,000,000 for sales. 
+
+```{r fig.height=7, fig.width=7, echo = FALSE}
+developer_data <- company_data %>% group_by(developer) %>% dplyr::summarise(sales = sum(sales),money = sum(money))
+company_data %>% group_by(developer) %>% dplyr::summarise(sales = sum(sales)) %>% 
+  filter(sales > 10000000) %>% 
+  ggplot() + geom_point(aes(x = reorder(developer, -sales), y = sales)) + 
+  geom_hline(yintercept = quantile(developer_data$sales, 0.99, na.rm = TRUE), color = "Pink") +
+  annotate("text", x = 25.5, y = 11000000, label = "Top 1%", color = "darkred") +
+  geom_hline(yintercept = quantile(developer_data$sales, 0.995, na.rm = TRUE), color = "Pink") +
+  annotate("text", x = 25.5, y = 22000000, label = "Top 0.5%", color = "darkred") +
+  scale_y_continuous(trans = log10_trans(),
+    breaks = trans_breaks("log10", function(x) 10^x),
+    labels = trans_format("log10", math_format(10^.x))) + 
+  xlab("Developers") + ylab("Sales Volume") + 
+  labs(title = "Total Sales Volume of large companies", subtitle = "Focus on developers having sales volume more than 10,000,000") + 
+  coord_flip() + blue_theme()
+```
+
+```{r fig.height=8, fig.width=7, echo=FALSE}
+company_data %>% group_by(developer) %>% 
+  dplyr::summarise(money = sum(money)) %>% 
+  filter(money > 100000000)  %>%
+  ggplot() + geom_point(aes(x = reorder(developer, -money), y = money)) + 
+  geom_hline(yintercept = quantile(developer_data$money, 0.99, na.rm = TRUE), color = "Pink") +
+  annotate("text", x = 25.5, y = 130000000, label = "Top 1%", color = "darkred") +
+  geom_hline(yintercept = quantile(developer_data$money, 0.995, na.rm = TRUE), color = "Pink") +
+  annotate("text", x = 25.5, y = 240000000, label = "Top 0.5%", color = "darkred") +
+  scale_y_continuous(trans = log10_trans(),
+    breaks = trans_breaks("log10", function(x) 10^x),
+    labels = trans_format("log10", math_format(10^.x))) + 
+  xlab("Developers") + ylab("Sales Value(dollar)") + 
+  labs(title = "Total Sales Volume of large companies", subtitle = "Focus on developers having sales value more than 100,000,000") + 
+  coord_flip() +
+  blue_theme()
+```
+
+```{r, echo=FALSE}
+aaa_developer <- company_data %>% group_by(developer) %>% 
+  dplyr::summarise(n = n(), sales = sum(sales), money = sum(money)) %>%
+  filter((sales > quantile(sales, 0.995, na.rm = TRUE)) | (money > quantile(money, 0.995, na.rm = TRUE)))
+
+aaa <- company_data %>% filter(developer %in% aaa_developer$developer)
+```
+
+## AAA Game Companies
+
+### Number of Games
+
+```{r, echo = FALSE}
+aaa_developer %>% ggplot() + geom_point(aes(x = reorder(developer,-money), y = n)) + coord_flip() +
+  xlab("Developers") + ylab("Number of Games") + 
+  labs(title = "Number of Games of AAA Companies", subtitle = "Sort by the total sales value of developers") + 
+  blue_theme()
+```
+
+AAA developers are the top 0.05% companies. There are 31 companies in total.  We pick them out and draw some plots. We reorder them by sales and show how many games they released. We are surprised that Pubg Corporation tops the sales but only has one game released. 
+
+### Sales Volume
+
+```{r fig.height=7, fig.width=8, echo=FALSE, warning = FALSE}
+aaa_developer %>% 
+  ggplot(aes(x = reorder(developer,-sales), y = sales,
+                 label = paste(as.character(round(sales/1000000)),"million"))) + 
+  geom_point() + 
+  scale_y_continuous(limits = c(8000000,600000000), trans = log10_trans(),
+    breaks = trans_breaks("log10", function(x) 10^x),
+    labels = trans_format("log10", math_format(10^.x))) + 
+  geom_text(vjust=-1, colour = "darkblue", size = 3.5) + coord_flip() +
+  xlab("Developers") + ylab("Sales Volume") + 
+  labs(title = "Sales Volume of AAA Companies") + 
+  blue_theme()
+```
+
+In the sales plot of AAA companies, Valve surpasses Pubg. We claim that it’s because Valve has more low-price games or free games. We can examine it later by showing their free games. 
+
+### Total Sales
+
+```{r fig.height=7, fig.width=8, echo=FALSE, warning = FALSE}
+aaa_developer %>% ggplot(aes(x = reorder(developer,-money), y = money, label = ifelse(money == 1,0, paste(as.character(round(money/1000000, digits = 2)),"million")))) + 
+  geom_point() + 
+  scale_y_continuous(limits = c(30000000,2000000000), trans = log10_trans(),
+    breaks = trans_breaks("log10", function(x) 10^x),
+    labels = trans_format("log10", math_format(10^.x))) + 
+  geom_text(vjust=-1, colour = "darkblue", size = 3.5) +
+  coord_flip() +
+  xlab("Developers") + ylab("Sales Value(dollar)") + 
+  labs(title = "Sales Value of AAA Companies") + 
+  blue_theme()
+```
+
+## Games of AAA Companies
+
+```{r, echo=FALSE}
+library(shiny)
+
+comp_name <- aaa_developer$developer
+
+ui <- fluidPage(
+  titlePanel("Games of large companies"),
+  sidebarLayout(
+    sidebarPanel(
+      selectInput(inputId = "company",
+                  label = "Choose the developer:",
+                  choices = comp_name),
+      
+      selectInput(inputId = "var",
+                  label = "Choose the variable:",
+                  choices = c("Average playtime", "Median playtime", "Ratio", 
+                              "Log of Sales Volume", "Price", "Log of Sales"))
+    ),
+    mainPanel(
+      plotOutput(outputId = "Plot1")
+
+    )
+  )
+)
+
+server <- function(input, output) {
+  output$Plot1 <- renderPlot({
+    var_cha <- input$var
+    var_name <-switch(input$var,
+             "Average playtime" = "log_avg",
+             "Median playtime" = "log_med",
+             "Ratio" = "ratio",
+             "Log of Sales Volume" = "log_sale",
+             "Price" = "price",
+             "Log of Sales" = "full_sales")
+    
+    comp <- input$company
+    
+    data_shiny_comp <- aaa %>% filter(developer == comp) %>%
+      mutate(ratio = positive_ratings/(positive_ratings + negative_ratings), 
+             log_avg = log(average_playtime), log_sale = log(sales), 
+             log_med = log(median_playtime), 
+             free = ifelse(price==0, "Free", "Not free"),
+             full_sales = log(sales*price))
+      ggplot() + 
+        geom_point(aes(x = reorder((data_shiny_comp$name), -data_shiny_comp[[var_name]]), 
+                        y = data_shiny_comp[[var_name]])) +
+        ggtitle(comp) + ylab(var_cha)+ xlab("Name of game") + coord_flip() + blue_theme()
+    })
+
+}
+
+shinyApp(ui = ui, server = server)
+```
+
