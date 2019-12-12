@@ -1,5 +1,6 @@
 book_filename: "finalproj"
 output_dir: docs
+runtime: shiny
 delete_merged_file: true
 edit: https://github.com/jerrysjhe/EDAVfinal/edit/master/%s
 view: https://github.com/jerrysjhe/EDAVfinal/blob/master/%s
