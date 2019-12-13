@@ -1,6 +1,6 @@
 --- 
-title: "YOUR TITLE HERE"
-author: "YOUR NAMES HERE"
+title: "How AAA Games Standout"
+author: "Shijie He, Chutian Chen, Banruo Xie, CongCheng Yan"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 ---
