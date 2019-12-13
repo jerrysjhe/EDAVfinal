@@ -1,2 +1,21 @@
 # Conclusion
 
+## Brief summary
+
+Based on the graph and analysis above, we can see that the major elements for AAA  games to stand out all the games is the sales(price, value and volume), game mode(single/multiplayer and game tags)and player feedback(ratings and average play time).
+
+For the sales part, it’s obvious that AAA games have high sales as we pick the high sales games as AAA. AAA companies have very high sales value and sales volume, and the majority of AAA companies have design multiple of AAA games with excellence sales value and volume. However, there is an exception for PUBG cooperation, it only creates one game called PUBG while its sales far exceeds the other AAA companies’ total sum of sales. Compared to AAA games, Non AAA games tends to set to low price as the small companies are not confident about the quality of the game and are afraid of being defeated by large companies(AAA companies). For sales numbers, there are a small number of non AAA games have great sales. Therefore, different companies will have their own strategy to fit the game market situation.
+
+For content part, multiplayer tends to have greater sales and average play time than single player for AAA games. Action, Strategy and FPS are top 3 popular game tags for AAA games and they are the templates to create popular games for both large companies and small companies. 
+
+For player feedback, AAA games will have more ratio of positive ratings and longer play time. Compare with AAA games, Non-AAA games will tend to have a mediocre positive ratings ratio and play time.
+
+
+## Limitations and Directions
+
+We don’t have access to the detail numbers of sales. The category data is not precise and our transformation cannot reveal the real number. We ease this issue by generating random number 
+from each range by normal distribution. We can completely fix the issue if the data source make the data public.
+
+Popular games always have in-game purchase and that is their main method to make profits. In our analysis, we only consider the sales volume and total sales to evaluate them. We can make further analysis for the impact of in-game purchase with respect to sales, player feedback, etc.
+
+With the comparison of AAA companies, the data is not enough to tell us more about the companies. Actually, these are only the results of games, and cannot show the overall strength of AAA companies. In the future, we could find some other background data to work with, such as their developing history and their investment.

@@ -1,206 +1,27 @@
-# Single and Multi
+# Game Mode
 
-## Multi or not
-
-```{r echo=FALSE}
-library(shiny)
-library(ggthemes)
-ui <- fluidPage(
-  titlePanel("Multiplayer Game or not"),
-  sidebarLayout(
-    sidebarPanel(
-      selectInput(inputId = "var",
-                  label = "Choose the variable:",
-                  choices = c("Average playtime", "Ratio", 
-                              "Log of Sales Volume", "Price", "Log of Sales"))
-    ),
-    mainPanel(
-      plotOutput(outputId = "Plot1")
-
-    )
-  )
-)
-
-server <- function(input, output) {
-  output$Plot1 <- renderPlot({
-    var_cha <- input$var
-    var_name <-switch(input$var,
-             "Average playtime" = "log_avg",
-             "Ratio" = "ratio",
-             "Log of Sales Volume" = "log_sale",
-             "Price" = "price",
-             "Log of Sales" = "full_sales")
-    
-    dataSet_a <- aaa %>% 
-      mutate(multi = ifelse(grepl("Multi-player",aaa$categories),"Yes","No"), 
-             log_avg = log(average_playtime), log_sale = log(sales), 
-             full_sales = log(money)) %>%
-      filter(average_playtime > quantile(average_playtime, 0.01, na.rm = TRUE)) %>%
-      filter(average_playtime < quantile(average_playtime, 0.99, na.rm = TRUE))
-        
-    dataSet_all <- company_data %>% 
-      mutate(multi = ifelse(grepl("Multi-player",company_data$categories),"Yes","No"), 
-             log_avg = log(average_playtime), log_sale = log(sales), 
-             full_sales = log(money)) %>%
-      filter(average_playtime > quantile(average_playtime, 0.01, na.rm = TRUE)) %>%
-      filter(average_playtime < quantile(average_playtime, 0.99, na.rm = TRUE))
-    library(forcats)
-    if (var_name == "ratio" || var_name == "price"){
-    g1 <- ggplot() +
-      geom_boxplot(aes(x = fct_rev(dataSet_a$multi),
-                       y = dataSet_a[[var_name]], fill = dataSet_a$multi), varwidth = TRUE, 
-                   outlier.shape=16) +
-      xlab("Multiplayer Game?") + ylab(var_cha) + ggtitle("AAA games") + 
-      theme_hc() + scale_colour_hc() + 
-      theme(axis.title.x = element_text(size = 16),
-            axis.title.y = element_text(size = 16),
-            axis.text.x = element_text(size = 12),
-            axis.text.y = element_text(size = 12),
-            plot.title = element_text(size = 22)) + labs(fill = "multi-player")
-    g2 <- ggplot() +
-      geom_boxplot(aes(x = fct_rev(dataSet_all$multi),
-                       y = dataSet_all[[var_name]], fill = dataSet_all$multi), varwidth = TRUE) +
-      xlab("Multiplayer Game?") + ylab(var_cha) + ggtitle("All games") + 
-      theme_hc() + scale_colour_hc() +
-      theme(axis.title.x = element_text(size = 16),
-            axis.title.y = element_text(size = 16),
-            axis.text.x = element_text(size = 12),
-            axis.text.y = element_text(size = 12),
-            plot.title = element_text(size = 22)) + labs(fill = "multi-player")
-    }else{
-       g1 <- ggplot() + 
-        geom_boxplot(aes(x = fct_rev(dataSet_a$multi),
-                         y = log(dataSet_a[[var_name]]), fill = dataSet_a$multi), 
-                     varwidth = TRUE) +
-        xlab("Multiplayer Game?") + ylab(var_cha) + ggtitle("AAA games") +
-        theme_hc() + scale_colour_hc() +
-        theme(axis.title.x = element_text(size = 16),
-              axis.title.y = element_text(size = 16),
-              axis.text.x = element_text(size = 12),
-              axis.text.y = element_text(size = 12),
-              plot.title = element_text(size = 22)) + labs(fill = "multi-player")
-      g2 <- ggplot() +
-        geom_boxplot(aes(x = fct_rev(dataSet_all$multi),
-                         y = log(dataSet_all[[var_name]]), fill = dataSet_all$multi), 
-                     varwidth = TRUE) +
-        xlab("Multiplayer Game?") + ylab(var_cha) + ggtitle("All games") + 
-        theme_hc() + scale_colour_hc() +
-        theme(axis.title.x = element_text(size = 16),
-              axis.title.y = element_text(size = 16),
-              axis.text.x = element_text(size = 12),
-              axis.text.y = element_text(size = 12),
-              plot.title = element_text(size = 22)) + labs(fill = "multi-player")
-    }
-    grid.arrange(g1,g2,nrow=1)
-  })
-
-}
-
-shinyApp(ui = ui, server = server, options = list(height = 530))
-```
-
-We draw a dot plot of AAA company games considering whether the game can be played with other players, that is, whether it has the multi-game. Both of them have a more-sales-more-playtime trend. But, when we look at the high average playtime region, the points are mainly multi-games. It makes sense because people playing multi-games tend to spend more time for the cooperation and more engaged in the game. 
-
-## Single or not
+## Multi-player Games
 
 ```{r echo=FALSE}
-library(shiny)
-
-ui <- fluidPage(
-  titlePanel("Single Game or not"),
-  sidebarLayout(
-    sidebarPanel(
-      selectInput(inputId = "var",
-                  label = "Choose the variable:",
-                  choices = c("Average playtime", "Ratio", 
-                              "Log of Sales Volume", "Price", "Log of Sales"))
-    ),
-    mainPanel(
-      plotOutput(outputId = "Plot1")
-
-    )
-  )
-)
-
-server <- function(input, output) {
-  output$Plot1 <- renderPlot({
-    var_cha <- input$var
-    var_name <-switch(input$var,
-             "Average playtime" = "log_avg",
-             "Ratio" = "ratio",
-             "Log of Sales Volume" = "log_sale",
-             "Price" = "price",
-             "Log of Sales" = "full_sales")
-    
-    dataSet_a <- aaa %>% 
-      mutate(multi = ifelse(grepl("Single-player",aaa$categories),"Yes","No"), 
-             log_avg = log(average_playtime), log_sale = log(sales), 
-             full_sales = log(money)) %>%
-      filter(average_playtime > quantile(average_playtime, 0.01, na.rm = TRUE)) %>%
-      filter(average_playtime < quantile(average_playtime, 0.99, na.rm = TRUE))
-        
-    dataSet_all <- company_data %>% 
-      mutate(multi = ifelse(grepl("Single-player",company_data$categories),"Yes","No"), 
-             log_avg = log(average_playtime), log_sale = log(sales), 
-             full_sales = log(money)) %>%
-      filter(average_playtime > quantile(average_playtime, 0.01, na.rm = TRUE)) %>%
-      filter(average_playtime < quantile(average_playtime, 0.99, na.rm = TRUE))
-    
-    if (var_name == "ratio" || var_name == "price"){
-      g1 <- ggplot() + 
-        geom_boxplot(aes(x = fct_rev(dataSet_a$multi), 
-                         y = dataSet_a[[var_name]], fill = dataSet_a$multi), varwidth = TRUE) +
-        xlab("Singleplayer Game?") + ylab(var_cha) + ggtitle("AAA games") + 
-        theme_hc() + scale_colour_hc() +
-        theme(axis.title.x = element_text(size = 16),
-              axis.title.y = element_text(size = 16),
-              axis.text.x = element_text(size = 12),
-              axis.text.y = element_text(size = 12),
-              plot.title = element_text(size = 22)) + labs(fill = "multi-player")
-      g2 <- ggplot() + 
-        geom_boxplot(aes(x = fct_rev(dataSet_all$multi), 
-                         y = dataSet_all[[var_name]], fill = dataSet_all$multi), 
-                     varwidth = TRUE) +
-        xlab("Singleplayer Game?") + ylab(var_cha) + ggtitle("All games") + 
-        theme_hc() + scale_colour_hc() +
-        theme(axis.title.x = element_text(size = 16),
-              axis.title.y = element_text(size = 16),
-              axis.text.x = element_text(size = 12),
-              axis.text.y = element_text(size = 12),
-              plot.title = element_text(size = 22)) + labs(fill = "multi-player")
-    }else{
-      g1 <- ggplot() + 
-        geom_boxplot(aes(x = fct_rev(dataSet_a$multi), 
-                         y = log(dataSet_a[[var_name]]), fill = dataSet_a$multi), 
-                     varwidth = TRUE) +
-        xlab("Singleplayer Game?") + ylab(var_cha) + ggtitle("AAA games") +
-        theme_hc() + scale_colour_hc() +
-        theme(axis.title.x = element_text(size = 16),
-              axis.title.y = element_text(size = 16),
-              axis.text.x = element_text(size = 12),
-              axis.text.y = element_text(size = 12),
-              plot.title = element_text(size = 22)) + labs(fill = "multi-player")
-      g2 <- ggplot() + 
-        geom_boxplot(aes(x = dataSet_all$multi, 
-                         y = log(dataSet_all[[var_name]]), fill = dataSet_all$multi), 
-                     varwidth = TRUE) +
-        xlab("Singleplayer Game?") + ylab(var_cha) + ggtitle("All games") + 
-        theme_hc() + scale_colour_hc() +
-        theme(axis.title.x = element_text(size = 16),
-              axis.title.y = element_text(size = 16),
-              axis.text.x = element_text(size = 12),
-              axis.text.y = element_text(size = 12),
-              plot.title = element_text(size = 22)) + labs(fill = "multi-player")
-    }
-    grid.arrange(g1,g2,nrow=1)
-    })
-}
-
-shinyApp(ui = ui, server = server, options = list(height = 530))
+knitr::include_app("https://jerrysjhe.shinyapps.io/shiny_7_1/", height = "550px")
 ```
 
-The graph above shows the boxplot for single/multi player game with ‘AAA’ elements vs sales. Games that are ‘AAA’ (on the left) both have great sales than non ‘AAA’ games. And multi players game in general have larger sales than single players while game companies tend to make more single player game than multi-player game. The reason might be the low budget and few time cost for designing new single player games
+Multiplayer games are the games that people can play with other players.
+Single-player-only games are games only for single players.
 
-```{r, echo=FALSE}
-knitr::include_app("https://jerrysjhe.shinyapps.io/wufan/", height = "600px")
+To see the difference between multi-player games and single-player-only games, we can choose one variable and draw box plots to see the distribution. We can tell from the plots that multi-player games usually have slightly more playtime,less ratio, and they are more expensive. In sales volume and total sales, they do much better than single-player-only games. Coincidentally, these trends are the same in AAA games and Non-AAA games.
+
+Multiplayer games perform better in most variables, and AAA developers are more likely to develop them. In contrast, Non-AAA developers develop single-player-only games almost twice as many as multi-player games. Moreover, multiplayer games from AAA developers have higher quality than Non-AAA developers. That must be some other reasons, we guess Non-AAA developers could not devote much to maintain the servers of multi-player games.
+
+
+## Single-player Games
+
+```{r echo=FALSE}
+knitr::include_app("https://jerrysjhe.shinyapps.io/final_7_2/", height = "550px")
 ```
+
+Single games are the games that people can play alone.
+
+Multiplayer-only games are games only for multiple players.
+ 
+Multiplayer-only games don’t perform better than single games in playtime and ratio. But they have lower prices and sell much more than single games. AAA developers and other developers develop similar number of multiplayer-only games. It is a little weird that AAA developers don’t develop more multiplayer-only games since they sell well. Concerning the average playtime and ratio, we guess maybe players are more strict with multiplayer-only games. So AAA developers are cautious with the multiplayer-only games they release. If they are good enough, their reputation would be damaged by the negative ratings.

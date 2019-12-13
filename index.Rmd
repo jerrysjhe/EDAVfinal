@@ -7,28 +7,44 @@ site: bookdown::bookdown_site
 
 # Introduction
 
-As the digital technology increasing rapidly, video games is part of our life. Many students have played games on a PC platform Steam, including us. There are so many games and we may find it difficult to decide which game to play. Also, we have conflicts on defining which games are “good” and which are not. Maybe we cannot come to an agreement, but we are all interested in finding trends and patterns behind the popular games. Moreover, we would gain insights into what makes a game more successful in terms of sales, play-time and ratings, etc. We want to take a closer look at the data behind the games. But first, let us introduce some backgrounds for our data visualization.
+As the digital technology increasing rapidly, video games are part of our life. Many students have played games on a PC platform Steam, including us. There are some video games on Steam now and many of them have really great quality. However, it’s always difficult to find good ones in such a large number of games just through the brief game introduction on Steam. So many people will choose to buy and play the games from well-known and developers with adequate funds as these games are more likely to be great. These games are what we call AAA games.
 
-## Brief introduction
+It’s obvious that not all AAA games are excellent and not all Non-AAA games are boring. We can’t simply use the “good” or “popular” to determine the difference between AAA games and Non-AAA. Thus, in the project, we would like to find what makes AAA games different from the other games. We are going to present this topic from three parts, evaluation from players, game mode(focus on single-player only and multi-player only games) and game type.
+
+Our team has great passion for video games and we spend lots of time on them. We are all interested in finding trends and patterns behind the popular games. Moreover, we would gain insights into what makes a game more successful in terms of sales, play-time and ratings, etc. We want to take a closer look at the data behind the games. But first, let us introduce some backgrounds for our data visualization.
+
+
+## Brief introduction of Steam
 
 **Steam** is the major gaming platform developed by Valve in PC which almost include all possible games on the PC. It was first launched as gaming improvement software in 2003 as a way for Valve to provide automatic updates for their games, and expanded to include games from third-party publishers. Steam has also expanded into an online web-based and mobile digital storefront. Steam offers digital rights management for protecting game copyrights, matchmaking servers for online multiplayer gaming, video streaming for recording and publishing game videos, and social networking services for connecting and exploring game social. It also provides the user with installation and automatic updating of games, and community features such as friends lists and groups, cloud saving, and in-game voice and chat functionality.
 
-For more detail information, please visit wikipedia: https://en.wikipedia.org/wiki/Steam_(service)
+For more detail information, please visit: https://en.wikipedia.org/wiki/Steam_(service)
+
 
 ## Criteria for judging a game
 
-We will use the definition of AAA games: It is a classification used for video games produced and distributed by major famous publisher(companies that having top 0.5% sales), typically having higher development and marketing budgets. We also call these types of companies as AAA company. AAA is analogous to the film industry term "blockbuster". 
+We will use the definition of AAA games: It is a classification used for video games produced and distributed by major famous publisher, typically having higher development and marketing budgets. AAA is analogous to the film industry term "blockbuster". 
 
-For more detail information, please visit wikipedia:
+As there is no generally accepted major famous game company list, we pick the companies which have the highest total sales on steam as our AAA companies (top 0.5% in our project). And games of them are AAA games.
+
+For more detail information, please visit:
 https://en.wikipedia.org/wiki/AAA_(video_game_industry)
- 
-## Question
-1. What is the difference in sales between free games and charged games?
-2. Perform ranking of total sales for all companies, then take a closer look to companies at top rankings. What are the factors for influencing companies to produce good game? 
-3. Does the multiplayer games or single-player games have an effect on game sale, or ‘AAA’ games
-4. What will the player‘s phenomenon and reaction for good game(avg play time, ratings, etc)?
-5. Does game price have an effect on game sales, ratings?
-6. What will be the difference between normal games and ‘AAA’ games
 
-Finally, we have our overall objective: what will be the key elements that effect on ‘AAA’ games?
+
+## Question
+
+- Which companies are major and famous? What games do they have?
+
+- Is there any pattern between the evaluation of AAA games? For example, the relationship between positive rates and average playtime.
+
+- Is there any difference of evaluation between AAA and Non-AAA games?
+
+- What kind of game modes AAA companies prefer, single-player or multi-player? What about the other companies? 
+
+- Will the game modes influence the sales or positive rates?
+
+- What type of game do the developers prefer to make? What is the difference of the game tags between AAA and Non-AAA games
+
+
+Finally, we have our overall objective: the elements make AAA different from the other games.
 

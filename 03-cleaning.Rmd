@@ -2,15 +2,16 @@
 
 ## Description
 
-Since the data has been pre-cleaned by the source, our transformation is: 
+Since the data has been pre-cleaned by the source,  our transformation is: 
 
 1. To deal with the sales variable, we convert the ranges (categories) into quantity by generating random numbers from the normal distribution in range. For each range, we set the medium number as the mean, standard deviation as the range/6. The main purpose of generating random number is to produce continuous data instead of categories data. For example, in range "0-20000", we will replace value by  generating number within mean = 10000, and standard deviation = 20000/6 (Since by the definition of area in normal distribution, 20000/6 will cover 99.7% of the total area in normal distribution) if the generated data is outside of 99.7% area in normal distribution, we will round them inside.
 
-2. Combine developers with their branch (For instance, "Ubisoft Montreal" is the Canandian branch of "Ubisoft") and integrate the format of the same developer in different expressions. (For instance, “Astrofish Games” and “Astrofish Games Ltd” or “Astrofish Games Co, Ltd”)
+2. Combine developers with their branch (For instance, "Ubisoft Montreal" is the Canandian branch of "Ubisoft") and integrate the format of the same developer in different expressions (For instance, “Astrofish Games” and “Astrofish Games Ltd” or “Astrofish Games Co, Ltd”).
 
 3. Group the data by platform, developer, etc. Filter the developers with the number of games they publish.
 
-## Before transformation
+
+## Data Overview
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, results=FALSE}
 library(readr)
@@ -38,15 +39,16 @@ blue_theme <- function() {
     panel.grid.major.y =  element_line(colour = "steelblue", linetype = 3, size = 0.5),
     panel.grid.minor.y = element_blank(),
     # modify text, axis and colour 4) and 5)
-    axis.text = element_text(colour = "steelblue", face = "italic", family = "Times New Roman", size = 10),
+    axis.text = element_text(colour = "steelblue", 
+                             face = "italic", family = "Times New Roman", size = 10),
     axis.title = element_text(colour = "darkblue", family = "Times New Roman", size = 13),
     axis.ticks = element_line(colour = "steelblue"),
     # legend at the bottom 6)
     legend.position = "bottom",
     # title
-    plot.title = element_text(family = "Times New Roman",face = "bold",size = 15),
-    plot.subtitle = element_text(size = 10),
-    plot.caption = element_text(size = 8)
+    plot.title = element_text(family = "Times New Roman",face = "bold",size = 17),
+    plot.subtitle = element_text(size = 14),
+    plot.caption = element_text(size = 10)
   )
 }
 update_geom_defaults("bar", list(fill = "steelblue", alpha = 0.6, colour = "blue"))
@@ -139,13 +141,19 @@ data %>% ggplot(aes(x = sales)) + geom_histogram(bins = 40) + geom_density() +
   blue_theme()
 ```
 
-First, we look at the graph as dimension of sales number and number of companies, from the graph above to find the pattern for games’ sales volume. We draw two vertical lines, sales volume of 10000 and 100000, as shrehold to identify the game. 
+First, we look at the graph as dimension of sales number and number of games, from the graph above to find the pattern for games’ sales volume. We draw two vertical lines, sales volume of 10,000 and 100,000, as threshold to identify the game. 
 
-We can see that it’s approximately a right-skewed normal distribution. The largest bar is around 10000, which means many games have 10000 sales volume or below. Since our focus is primarily on games who are defined as ‘good’, which would be ‘AAA games’, therefore, we add a threshold at 10000(red line), and drop the game that sales volume is about 10000 and below, which means ’the games whose sales volume below 10000 have few quantities and hence is trivial for us to make further analysis. For our next step, we add another threshold line at 100000(blue line). Since there are too many games below 100000 and it is not in our consideration for AAA games. Therefore, we further narrow down our scope for analyzing top games.
+We can see that it’s approximately a right-skewed normal distribution. The largest bar is around 10,000, which means most games have 10,000 sales volume or below. It means that most of the games on Steam hardly have players to play and are in poor quality. We believe that many games in this range are not produced seriously.
 
-Concerning that sales of games would vary dramatically from the time they just have been released and become steady after a period of time, we drop the games released after 2019 since the result would be unstable. In another perspective of filtering, we mark the companies whose sales volume over 100000 as “large companies”. We define “ratio” as positive ratings over all ratings and “money” as sales volume multiplied by price.
+The games with more than 100,000 sales volume can be considered relatively popular as we see in the graph. They seem to attract a lot of people and can be compared with AAA games. 
 
-## After transformation
+## Transformation
+
+To make our analysis more reasonable and clear, we filtered out the total game sales of companies that less than 100,000, narrowing down our analyze range.
+
+As we said it before, we need good games to compare with AAA games. Using data of games in poor quality will only add the outliers and make the graph unclear. There is no comparability between them. To filter out these games, we compute the total sales volume of companies first. If a company has a high total sales, it’s more likely that the company puts many resources in games and it guarantees the quality of games. Thus, we use the total sales volume of a company when doing filtering.
+
+Concerning that sales of games would vary dramatically from the time they just have been released and become steady after a period of time, we drop the games released after 2019 since the result would be unstable. In another perspective of filtering, we mark the companies whose sales volume over 100,000 as “large companies”. We define “ratio” as positive ratings over all ratings and “money” as sales volume multiplied by price.
 
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 # remove new game
@@ -172,5 +180,4 @@ company_data %>% ggplot() + geom_histogram(aes(x = sales), bins = 30) +
   blue_theme()
 ```
 
-Similar to the game volume plot, we filtered first that for the total game sales of companies that larger than 100000, narrowing down our analyze range. After we draw sales plot grouping by developers, it shows almost the same distribution: a right-skewed normal distribution. So, we add red shrehold line at 10000 and drop the developers whose sales below it for the same reason.
-
+The same distribution is shown after filtering: a right-skewed normal distribution. We can see that most of the games having sales volume less than 10,000 are filtered. 

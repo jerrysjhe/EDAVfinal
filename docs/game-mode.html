@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 7 Game Mode | YOUR TITLE HERE</title>
+  <meta name="description" content="Chapter 7 Game Mode | YOUR TITLE HERE" />
+  <meta name="generator" content="bookdown 0.14 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 7 Game Mode | YOUR TITLE HERE" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 7 Game Mode | YOUR TITLE HERE" />
+  
+  
+  
+
+<meta name="author" content="YOUR NAMES HERE" />
+
+
+<meta name="date" content="2019-12-12" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="evaluation-from-players.html"/>
+<link rel="next" href="game-tags.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/htmlwidgets-1.3/htmlwidgets.js"></script>
+<link href="libs/parallel-coordinates-2.1.8/parcoords.css" rel="stylesheet" />
+<script src="libs/parcoords-binding-1.0.0/parcoords.js"></script>
+<link href="libs/wordcloud2-0.0.1/wordcloud.css" rel="stylesheet" />
+<script src="libs/wordcloud2-0.0.1/wordcloud2-all.js"></script>
+<script src="libs/wordcloud2-0.0.1/hover.js"></script>
+<script src="libs/wordcloud2-binding-0.2.1/wordcloud2.js"></script>
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">SHORT TITLE HERE</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#brief-introduction-of-steam"><i class="fa fa-check"></i><b>1.1</b> Brief introduction of Steam</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#criteria-for-judging-a-game"><i class="fa fa-check"></i><b>1.2</b> Criteria for judging a game</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#question"><i class="fa fa-check"></i><b>1.3</b> Question</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a><ul>
+<li class="chapter" data-level="2.1" data-path="data-sources.html"><a href="data-sources.html#obstacles"><i class="fa fa-check"></i><b>2.1</b> Obstacles</a></li>
+<li class="chapter" data-level="2.2" data-path="data-sources.html"><a href="data-sources.html#plan"><i class="fa fa-check"></i><b>2.2</b> Plan</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a><ul>
+<li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#description"><i class="fa fa-check"></i><b>3.1</b> Description</a></li>
+<li class="chapter" data-level="3.2" data-path="data-transformation.html"><a href="data-transformation.html#data-overview"><i class="fa fa-check"></i><b>3.2</b> Data Overview</a></li>
+<li class="chapter" data-level="3.3" data-path="data-transformation.html"><a href="data-transformation.html#transformation"><i class="fa fa-check"></i><b>3.3</b> Transformation</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a></li>
+<li class="chapter" data-level="5" data-path="find-aaa-games.html"><a href="find-aaa-games.html"><i class="fa fa-check"></i><b>5</b> Find AAA Games</a><ul>
+<li class="chapter" data-level="5.1" data-path="find-aaa-games.html"><a href="find-aaa-games.html#find-aaa-developers"><i class="fa fa-check"></i><b>5.1</b> Find AAA Developers</a></li>
+<li class="chapter" data-level="5.2" data-path="find-aaa-games.html"><a href="find-aaa-games.html#overview-of-aaa-devolpers"><i class="fa fa-check"></i><b>5.2</b> Overview of AAA Devolpers</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="find-aaa-games.html"><a href="find-aaa-games.html#number-of-games"><i class="fa fa-check"></i><b>5.2.1</b> Number of Games</a></li>
+<li class="chapter" data-level="5.2.2" data-path="find-aaa-games.html"><a href="find-aaa-games.html#sales-volume"><i class="fa fa-check"></i><b>5.2.2</b> Sales Volume</a></li>
+<li class="chapter" data-level="5.2.3" data-path="find-aaa-games.html"><a href="find-aaa-games.html#total-sales"><i class="fa fa-check"></i><b>5.2.3</b> Total Sales</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="find-aaa-games.html"><a href="find-aaa-games.html#games-of-aaa-companies"><i class="fa fa-check"></i><b>5.3</b> Games of AAA Companies</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="evaluation-from-players.html"><a href="evaluation-from-players.html"><i class="fa fa-check"></i><b>6</b> Evaluation From Players</a><ul>
+<li class="chapter" data-level="6.1" data-path="evaluation-from-players.html"><a href="evaluation-from-players.html#parallel-coordinates"><i class="fa fa-check"></i><b>6.1</b> Parallel Coordinates</a></li>
+<li class="chapter" data-level="6.2" data-path="evaluation-from-players.html"><a href="evaluation-from-players.html#correlation-of-different-variable"><i class="fa fa-check"></i><b>6.2</b> Correlation of Different Variable</a></li>
+<li class="chapter" data-level="6.3" data-path="evaluation-from-players.html"><a href="evaluation-from-players.html#relationship-of-aaa-and-non-aaa"><i class="fa fa-check"></i><b>6.3</b> Relationship of AAA and non-AAA</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="evaluation-from-players.html"><a href="evaluation-from-players.html#ratio-and-price"><i class="fa fa-check"></i><b>6.3.1</b> Ratio and Price</a></li>
+<li class="chapter" data-level="6.3.2" data-path="evaluation-from-players.html"><a href="evaluation-from-players.html#ratio-and-sales"><i class="fa fa-check"></i><b>6.3.2</b> Ratio and Sales</a></li>
+<li class="chapter" data-level="6.3.3" data-path="evaluation-from-players.html"><a href="evaluation-from-players.html#ratio-and-average-time"><i class="fa fa-check"></i><b>6.3.3</b> Ratio and Average time</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="game-mode.html"><a href="game-mode.html"><i class="fa fa-check"></i><b>7</b> Game Mode</a><ul>
+<li class="chapter" data-level="7.1" data-path="game-mode.html"><a href="game-mode.html#multi-player-games"><i class="fa fa-check"></i><b>7.1</b> Multi-player Games</a></li>
+<li class="chapter" data-level="7.2" data-path="game-mode.html"><a href="game-mode.html#single-player-games"><i class="fa fa-check"></i><b>7.2</b> Single-player Games</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="game-tags.html"><a href="game-tags.html"><i class="fa fa-check"></i><b>8</b> Game Tags</a><ul>
+<li class="chapter" data-level="8.1" data-path="game-tags.html"><a href="game-tags.html#type-of-aaa-games"><i class="fa fa-check"></i><b>8.1</b> Type of AAA Games</a></li>
+<li class="chapter" data-level="8.2" data-path="game-tags.html"><a href="game-tags.html#type-of-all-games"><i class="fa fa-check"></i><b>8.2</b> Type of All Games</a></li>
+<li class="chapter" data-level="8.3" data-path="game-tags.html"><a href="game-tags.html#popular-tags-from-1998-2018"><i class="fa fa-check"></i><b>8.3</b> Popular Tags from 1998-2018</a></li>
+<li class="chapter" data-level="8.4" data-path="game-tags.html"><a href="game-tags.html#worldcloud"><i class="fa fa-check"></i><b>8.4</b> Worldcloud</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>9</b> Conclusion</a><ul>
+<li class="chapter" data-level="9.1" data-path="conclusion.html"><a href="conclusion.html#brief-summary"><i class="fa fa-check"></i><b>9.1</b> Brief summary</a></li>
+<li class="chapter" data-level="9.2" data-path="conclusion.html"><a href="conclusion.html#limitations-and-directions"><i class="fa fa-check"></i><b>9.2</b> Limitations and Directions</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">YOUR TITLE HERE</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="game-mode" class="section level1">
+<h1><span class="header-section-number">Chapter 7</span> Game Mode</h1>
+<div id="multi-player-games" class="section level2">
+<h2><span class="header-section-number">7.1</span> Multi-player Games</h2>
+<iframe src="https://jerrysjhe.shinyapps.io/shiny_7_1/?showcase=0" width="672" height="550px">
+</iframe>
+<p>Multiplayer games are the games that people can play with other players.
+Single-player-only games are games only for single players.</p>
+<p>To see the difference between multi-player games and single-player-only games, we can choose one variable and draw box plots to see the distribution. We can tell from the plots that multi-player games usually have slightly more playtime,less ratio, and they are more expensive. In sales volume and total sales, they do much better than single-player-only games. Coincidentally, these trends are the same in AAA games and Non-AAA games.</p>
+<p>Multiplayer games perform better in most variables, and AAA developers are more likely to develop them. In contrast, Non-AAA developers develop single-player-only games almost twice as many as multi-player games. Moreover, multiplayer games from AAA developers have higher quality than Non-AAA developers. That must be some other reasons, we guess Non-AAA developers could not devote much to maintain the servers of multi-player games.</p>
+</div>
+<div id="single-player-games" class="section level2">
+<h2><span class="header-section-number">7.2</span> Single-player Games</h2>
+<iframe src="https://jerrysjhe.shinyapps.io/final_7_2/?showcase=0" width="672" height="550px">
+</iframe>
+<p>Single games are the games that people can play alone.</p>
+<p>Multiplayer-only games are games only for multiple players.</p>
+<p>Multiplayer-only games don’t perform better than single games in playtime and ratio. But they have lower prices and sell much more than single games. AAA developers and other developers develop similar number of multiplayer-only games. It is a little weird that AAA developers don’t develop more multiplayer-only games since they sell well. Concerning the average playtime and ratio, we guess maybe players are more strict with multiplayer-only games. So AAA developers are cautious with the multiplayer-only games they release. If they are good enough, their reputation would be damaged by the negative ratings.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="evaluation-from-players.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="game-tags.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/jerrysjhe/EDAVfinal/edit/master/07-singlemulti.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

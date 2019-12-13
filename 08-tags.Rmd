@@ -1,8 +1,8 @@
-# Tags
+# Game Tags
 
 ## Type of AAA Games
 
-```{r, echo=FALSE}
+```{r echo=FALSE, fig.height=6}
 tag <- data.frame(unlist(strsplit(aaa$steamspy_tags,";")))
 colnames(tag) <- c("tag")
 
@@ -15,9 +15,11 @@ tag %>% group_by(tag) %>% summarise(n = n()) %>%
   blue_theme()
 ```
 
+In AAA games, the top 3 popular tags are Action, Strategy, FPS, which corresponds to the current game market trend. For example, GTA5, an action game developed 6 years ago, has the top 1 total sales and is still popular compared to others. Civilization VI and DOTA 2 are two excellent strategy games on the 2018 best seller top 10 list. Open world and Multiplayer tags are also popular for AAA games. As a result, AAA company will be more likely to put resource and cost to develop such games as they are profitable and attractive to players. 
+
 ## Type of All Games
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, fig.height=6}
 tag_all <- data.frame(unlist(strsplit(company_data$steamspy_tags,";")))
 colnames(tag_all) <- c("tag")
 tag_all %>% group_by(tag) %>% summarise(n = n()) %>%
@@ -30,8 +32,47 @@ tag_all %>% group_by(tag) %>% summarise(n = n()) %>%
   blue_theme()
 ```
 
-In ‘AAA’ games, the top 3 popular tags are Action, Strategy, FPS, which corresponds to the current market trend. For example, action game GTA5, developed  has the top 1 total sales Company will be devoted to develop such games as they are profitable and attractive to players.
-In non ‘AAA’ games.
+In Non-AAA games, the largest tag is indie, the small independent game without publisher and sponsor, since the majority of Non-AAA games are made by a small company, even by several people. Among the top 10 tags, the graph also includes the popular game tags for AAA games as the small game type will be affected by the large, famous and successful games. Another difference compared to AAA games tags is that the Casual tag is in 3rd place for Non-AAA games. Open world and Multiplayer tags have low number. These phenomena can be explained by the lack of capital and resources for developing for small companies. As a result, they will give up developing large scale games like Multiplayer and Open world to save cost and put more focus on small games such as casual because they are cheap and easy to develop. 
+
+## Popular Tags from 1998-2018
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(lubridate)
+aaatag_t <- aaa %>% select(steamspy_tags,release_date) %>% 
+  unnest(steamspy_tags = strsplit(steamspy_tags, ";")) %>%
+  mutate(year = as.numeric(year(release_date)))
+
+aaatag_t <- aaatag_t %>% group_by(steamspy_tags,year) %>% summarise(n=n())
+
+aaatag_t %>% filter((steamspy_tags == "Action")|(steamspy_tags == "Strategy")|
+                      (steamspy_tags == "FPS")|(steamspy_tags == "Adventure")|
+                      (steamspy_tags == "Open World")|(steamspy_tags == "Multiplayer")) %>%
+  ggplot() + geom_line(aes(x = year, y = n, color = steamspy_tags)) +
+  scale_x_continuous(breaks = seq(1998,2018,2)) +
+  ylab("Frequency") + xlab("Year") + 
+  labs(title = "Change of Tag Frequency", subtitle = "Tags of AAA games", color = "Tags") +
+  blue_theme()
+```
+
+From the graph above, AAA games have no great patterns as the time increasing since top 0.5% games number is too small, the pattern is not easy to find.
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+tag_t <- company_data %>% select(steamspy_tags,release_date) %>% 
+  unnest(steamspy_tags = strsplit(steamspy_tags, ";")) %>%
+  mutate(year = as.numeric(year(release_date)))
+
+tag_t <- tag_t %>% group_by(steamspy_tags,year) %>% summarise(n=n())
+tag_t %>% filter((steamspy_tags == "Action")|(steamspy_tags == "Strategy")|
+                   (steamspy_tags == "FPS")|(steamspy_tags == "Indie")|
+                   (steamspy_tags == "Casual")|(steamspy_tags == "Adventure")) %>%
+  ggplot() + geom_line(aes(x = year, y = n, color = steamspy_tags)) +
+  scale_x_continuous(breaks = seq(1998,2018,2)) +
+  ylab("Tag Frequency") + xlab("Year") + 
+  labs(title = "Change of Tag Frequency", subtitle = "Tags of all games", color = "Tags") +
+  blue_theme()
+```
+
+For Non-AAA games, as the time increase, we can see the number of games designed is increasing rapidly, and the game with top trending game tags are increasing more rapidly.
 
 ## Worldcloud
 
