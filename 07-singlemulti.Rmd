@@ -202,5 +202,5 @@ shinyApp(ui = ui, server = server, options = list(height = 530))
 The graph above shows the boxplot for single/multi player game with ‘AAA’ elements vs sales. Games that are ‘AAA’ (on the left) both have great sales than non ‘AAA’ games. And multi players game in general have larger sales than single players while game companies tend to make more single player game than multi-player game. The reason might be the low budget and few time cost for designing new single player games
 
 ```{r, echo=FALSE}
-knitr::include_app("https://jerrysjhe.shinyapps.io/test/", height = "600px")
+knitr::include_app("https://jerrysjhe.shinyapps.io/wufan/", height = "600px")
 ```
